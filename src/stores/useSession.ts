@@ -1,4 +1,5 @@
 import create from 'zustand';
+import store from 'zustand/vanilla';
 
 type MqttClient = import('mqtt').Client;
 
@@ -10,7 +11,7 @@ type ActiveClients = {
   remove: (name: string) => void;
 };
 
-const useSession = create<ActiveClients>((set) => ({
+export const session = store<ActiveClients>((set) => ({
   data: {},
   add: (name: string, client: MqttClient) => {
     set((state) => ({
@@ -25,4 +26,4 @@ const useSession = create<ActiveClients>((set) => ({
   },
 }));
 
-export default useSession;
+export default create(session);

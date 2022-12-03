@@ -1,19 +1,8 @@
 import create from 'zustand';
-import { persist, type StateStorage } from 'zustand/middleware';
+import store from 'zustand/vanilla';
+import { persist } from 'zustand/middleware';
 
-import { get, set, del } from 'idb-keyval';
-
-const storage: StateStorage = {
-  getItem: async (name: string): Promise<string | null> => {
-    return (await get(name)) || null;
-  },
-  setItem: async (name: string, value: string): Promise<void> => {
-    await set(name, value);
-  },
-  removeItem: async (name: string): Promise<void> => {
-    await del(name);
-  },
-};
+import { IDBStore } from './persistStore';
 
 type InstancesStore = {
   data: Instance[];
@@ -23,7 +12,7 @@ type InstancesStore = {
   search: (id: string, cb: (index: number, instance: Instance) => void) => any;
 };
 
-const useInstance = create<InstancesStore>()(
+export const instance = store<InstancesStore>()(
   persist(
     (set, get) => ({
       data: [],
@@ -68,10 +57,10 @@ const useInstance = create<InstancesStore>()(
     }),
     {
       name: 'instances',
-      getStorage: () => storage,
+      getStorage: () => IDBStore,
       partialize: (state) => ({ data: state.data }),
     }
   )
 );
 
-export default useInstance;
+export default create(instance);

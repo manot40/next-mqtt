@@ -1,19 +1,8 @@
 import create from 'zustand';
-import { persist, type StateStorage } from 'zustand/middleware';
+import store from 'zustand/vanilla';
+import { persist } from 'zustand/middleware';
 
-import { get, set, del } from 'idb-keyval';
-
-const storage: StateStorage = {
-  getItem: async (name: string): Promise<string | null> => {
-    return (await get(name)) || null;
-  },
-  setItem: async (name: string, value: string): Promise<void> => {
-    await set(name, value);
-  },
-  removeItem: async (name: string): Promise<void> => {
-    await del(name);
-  },
-};
+import { IDBStore } from './persistStore';
 
 type MessageStore = {
   data: {
@@ -23,7 +12,7 @@ type MessageStore = {
   remove: (topic: string) => void;
 };
 
-const useMessage = create<MessageStore>()(
+export const message = store<MessageStore>()(
   persist(
     (set) => ({
       data: {},
@@ -44,9 +33,9 @@ const useMessage = create<MessageStore>()(
     }),
     {
       name: 'messages',
-      getStorage: () => storage,
+      getStorage: () => IDBStore,
     }
   )
 );
 
-export default useMessage;
+export default create(message);

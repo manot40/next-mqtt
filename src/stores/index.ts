@@ -1,4 +1,4 @@
-export { default as useInstance } from './useInstance';
-export { default as useSession } from './useSession';
-export { default as useMessage } from './useMessage';
-export { default as useChannel } from './useChannel';
+export { instance, default as useInstance } from './useInstance';
+export { session, default as useSession } from './useSession';
+export { message, default as useMessage } from './useMessage';
+export { channel, default as useChannel } from './useChannel';

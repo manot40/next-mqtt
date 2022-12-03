@@ -1,19 +1,8 @@
 import create from 'zustand';
-import { persist, type StateStorage } from 'zustand/middleware';
+import store from 'zustand/vanilla';
+import { persist } from 'zustand/middleware';
 
-import { get, set, del } from 'idb-keyval';
-
-const storage: StateStorage = {
-  getItem: async (name: string): Promise<string | null> => {
-    return (await get(name)) || null;
-  },
-  setItem: async (name: string, value: string): Promise<void> => {
-    await set(name, value);
-  },
-  removeItem: async (name: string): Promise<void> => {
-    await del(name);
-  },
-};
+import { IDBStore } from './persistStore';
 
 type ChannelStore = {
   data: {
@@ -24,7 +13,7 @@ type ChannelStore = {
   remove: (id: string) => void;
 };
 
-const useChannel = create<ChannelStore>()(
+export const channel = store<ChannelStore>()(
   persist(
     (set) => ({
       data: {},
@@ -53,9 +42,9 @@ const useChannel = create<ChannelStore>()(
     }),
     {
       name: 'channel',
-      getStorage: () => storage,
+      getStorage: () => IDBStore,
     }
   )
 );
 
-export default useChannel;
+export default create(channel);
