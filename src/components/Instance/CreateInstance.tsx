@@ -73,14 +73,17 @@ export default function CreateInstance({ isEdit, defaultMetaValue, defaultWillVa
 
   const mergeSubmitData = (e: React.FormEvent<HTMLFormElement>) => {
     const merged = {} as Instance;
+
     metaOnSubmit(({ name, ...opts }) => {
       merged.name = name;
       merged.clientOpts = opts;
     })(e);
+
     willOnSubmit((data) => {
       if (Object.keys(data).length) merged.clientOpts.will = data;
     })(e);
-    handleSubmit(merged);
+
+    if (Object.keys(merged).length) handleSubmit(merged);
   };
 
   return (
