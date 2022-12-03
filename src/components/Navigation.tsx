@@ -1,6 +1,7 @@
-import { createStyles, Container, Group, Text } from '@mantine/core';
+import { createStyles, Container, Group, Text, Flex } from '@mantine/core';
 
 import InstanceTab from './InstancesTab';
+import ThemeToggler from './ThemeToggler';
 
 type HeaderTabsProps = {};
 
@@ -10,9 +11,14 @@ export default function Navigation({}: HeaderTabsProps) {
   return (
     <div className={classes.header}>
       <Container className={classes.mainSection}>
-        <Group position="apart">
-          <Text weight={600}>FlexiMQ</Text>
-        </Group>
+        <Flex justify="space-between">
+          <Group position="apart">
+            <Text weight={600}>FlexiMQ</Text>
+          </Group>
+          <Group position="apart">
+            <ThemeToggler />
+          </Group>
+        </Flex>
       </Container>
       <Container>
         <InstanceTab />

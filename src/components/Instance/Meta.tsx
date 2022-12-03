@@ -2,20 +2,16 @@ import { connect } from 'libs/mqtt';
 
 import { useState } from 'react';
 import { useSession } from 'stores';
-import { useRouter } from 'next/router';
 import { useDisclosure } from '@mantine/hooks';
 
 import ActionMenu from './ActionMenu';
 import { showNotification } from '@mantine/notifications';
 import { Title, Text, Stack, Flex, Group, Button, Modal } from '@mantine/core';
-import { CreateChannel } from 'components/Channel';
+import { CreateMessage } from 'components/Message';
 
 type Props = {} & Instance;
 
 export default function Meta({ name, clientOpts: opts }: Props) {
-  const { push, pathname, query } = useRouter();
-  const path = pathname.replace(/(\[clientId\])/, query.clientId as string);
-
   const [loading, setLoading] = useState(false);
   const [modal, setModal] = useDisclosure(false);
 
@@ -30,6 +26,7 @@ export default function Meta({ name, clientOpts: opts }: Props) {
         removeClient(opts.clientId);
       } else {
         const client = await connect(opts);
+        client.subChannels();
         addClient(opts.clientId, client);
       }
 
@@ -47,12 +44,6 @@ export default function Meta({ name, clientOpts: opts }: Props) {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleChannelCreated = (chan: Channel) => {
-    session!.subscribe(chan.topic, { qos: chan.qos as any });
-    push(`${path}/${chan.topic}`);
-    setModal.close();
   };
 
   return (
@@ -75,14 +66,14 @@ export default function Meta({ name, clientOpts: opts }: Props) {
           </Button>
           {session && (
             <Button loading={loading} onClick={setModal.open} variant="outline" size="sm">
-              New Channel
+              New Message
             </Button>
           )}
           <ActionMenu name={name} clientOpts={opts} />
         </Group>
       </Flex>
-      <Modal title="Create New Channel" opened={modal} onClose={setModal.close}>
-        <CreateChannel id={opts.clientId} onSubmitted={handleChannelCreated} />
+      <Modal title="Compose New Message" opened={modal} onClose={setModal.close}>
+        <CreateMessage clientId={opts.clientId} />
       </Modal>
     </Stack>
   );

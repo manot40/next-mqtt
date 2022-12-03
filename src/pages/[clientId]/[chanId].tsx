@@ -2,6 +2,8 @@ import { useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { useInstance } from 'stores';
 
+import { Flex } from '@mantine/core';
+import * as Message from 'components/Message';
 import InstanceLayout from 'layouts/InstanceLayout';
 
 export default function ActiveInstance() {
@@ -10,15 +12,17 @@ export default function ActiveInstance() {
   const instances = useInstance((state) => state.data);
 
   const instance = useMemo(
-    () => instances.find((instance) => instance.clientOpts.clientId === query.clientId),
+    () => instances.find((instance) => instance.clientOpts.clientId === query.clientId) || null,
     [instances, query.clientId]
   );
 
-  if (!instance) return null;
-
   return (
     <InstanceLayout data={instance}>
-      <div>Active Instance</div>
+      {instance && (
+        <Flex direction={{ base: 'column', sm: 'row' }} gap={12}>
+          <Message.List channel={query.chanId as string} clientId={instance.clientOpts.clientId} />
+        </Flex>
+      )}
     </InstanceLayout>
   );
 }

@@ -1,6 +1,12 @@
 import mqtt from 'mqtt';
 
-export const connect = (opts: ClientOpts): Promise<mqtt.Client> =>
+import { channel, message } from 'stores';
+
+type MqttClientWithUtils = mqtt.Client & {
+  subChannels: (id?: string) => void;
+};
+
+export const connect = (opts: ClientOpts): Promise<MqttClientWithUtils> =>
   new Promise((res, rej) => {
     let finish = false;
 
@@ -11,8 +17,26 @@ export const connect = (opts: ClientOpts): Promise<mqtt.Client> =>
     });
 
     mqttClient.once('connect', () => {
+      const client = mqttClient as MqttClientWithUtils;
+
+      client.subChannels = function (id) {
+        const clientId = id || this.options.clientId!;
+
+        channel.getState().data[clientId]!.forEach((chan) => {
+          this.subscribe(chan.topic, { qos: chan.qos as any });
+        });
+
+        this.on('message', (topic, msg) => {
+          message.getState().add(clientId, {
+            topic,
+            epoch: Date.now(),
+            message: msg.toString(),
+          });
+        });
+      };
+
       finish = true;
-      res(mqttClient);
+      res(client);
     });
 
     mqttClient.once('error', (e) => {

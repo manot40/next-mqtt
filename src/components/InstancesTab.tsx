@@ -26,8 +26,8 @@ export default function InstanceTab() {
       <Tabs defaultValue={query.clientId as string} classNames={{ tab, tabsList }}>
         <Tabs.List>{TabItems}</Tabs.List>
       </Tabs>
-      <Flex onClick={setModal.open} py={18} style={{ cursor: 'pointer' }} align="center" h={24}>
-        <IconPlus size={16} stroke={1.33} />
+      <Flex onClick={setModal.open} py={16} style={{ cursor: 'pointer' }} align="center" h={24}>
+        <IconPlus size={16} stroke={1.6} />
         {!instances.length && (
           <Text ml={4} size={12} component="span">
             New Instance

@@ -36,7 +36,7 @@ type Channel = Pick<Topic, 'qos' | 'topic'>;
 
 type Message = {
   epoch: number;
-} & Topic;
+} & Pick<Topic, 'message' | 'topic'>;
 
 type Instance = {
   name: string;

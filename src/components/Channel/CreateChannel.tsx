@@ -39,6 +39,7 @@ export default function CreateChannel({ id, isEdit, defaultValue, onSubmitted }:
         message: 'Successfully created/updated channel',
       });
     } catch (err: any) {
+      console.error(err);
       showNotification({
         color: 'red',
         title: 'Error',

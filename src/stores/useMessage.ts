@@ -6,27 +6,28 @@ import { IDBStore } from './persistStore';
 
 type MessageStore = {
   data: {
-    [topic: string]: Message[] | undefined;
+    [instance: string]: Message[] | undefined;
   };
-  add: (topic: string, message: Message) => void;
-  remove: (topic: string) => void;
+  add: (id: string, message: Message) => void;
+  remove: (id: string) => void;
 };
 
 export const message = store<MessageStore>()(
   persist(
     (set) => ({
       data: {},
-      add: (topic: string, message: Message) => {
-        set((state) => ({
-          data: {
-            ...state.data,
-            [topic]: [...(state.data[topic] || []), message],
-          },
-        }));
-      },
-      remove: (topic: string) => {
+      add: (id, message) => {
         set((state) => {
-          delete state.data[topic];
+          const tmp = [...(state.data[id] || [])];
+          // if (tmp.length == 100) tmp.shift();
+          // if (tmp.some((m) => m.epoch == message.epoch)) return state;
+          tmp.push(message);
+          return { data: { ...state.data, [id]: tmp } };
+        });
+      },
+      remove: (id) => {
+        set((state) => {
+          delete state.data[id];
           return { data: { ...state.data } };
         });
       },

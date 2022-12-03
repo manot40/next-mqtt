@@ -31,7 +31,7 @@ const ActionMenu: React.FC<Props> = ({ name, clientOpts: opts }) => {
         </Menu.Target>
 
         <Menu.Dropdown>
-          <Menu.Item color="dark" icon={<IconEdit {...iconProps} />} onClick={setModal.open}>
+          <Menu.Item icon={<IconEdit {...iconProps} />} onClick={setModal.open}>
             Edit Instance
           </Menu.Item>
           <Menu.Item color="red" icon={<IconTrash {...iconProps} />} onClick={handleDelete}>
