@@ -35,6 +35,7 @@ export const message = store<MessageStore>()(
     {
       name: 'messages',
       getStorage: () => IDBStore,
+      partialize: (state) => ({ data: state.data }),
     }
   )
 );

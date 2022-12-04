@@ -43,6 +43,7 @@ export const channel = store<ChannelStore>()(
     {
       name: 'channel',
       getStorage: () => IDBStore,
+      partialize: (state) => ({ data: state.data }),
     }
   )
 );

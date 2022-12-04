@@ -8,7 +8,7 @@ import { Tabs, Text, Flex, Modal, createStyles } from '@mantine/core';
 
 import { CreateInstance } from 'components/Instance';
 
-export default function InstanceTab() {
+export default function InstanceList() {
   const { query } = useRouter();
   const { tab, tabsList } = useStyles().classes;
   const [modal, setModal] = useDisclosure(false);
@@ -27,9 +27,9 @@ export default function InstanceTab() {
         <Tabs.List>{TabItems}</Tabs.List>
       </Tabs>
       <Flex onClick={setModal.open} py={16} style={{ cursor: 'pointer' }} align="center" h={24}>
-        <IconPlus size={16} stroke={1.6} />
+        <IconPlus size={21} stroke={1.6} />
         {!instances.length && (
-          <Text ml={4} size={12} component="span">
+          <Text ml={4} size={14} component="span" style={{ userSelect: 'none' }}>
             New Instance
           </Text>
         )}

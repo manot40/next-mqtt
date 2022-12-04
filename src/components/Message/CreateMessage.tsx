@@ -39,7 +39,12 @@ export default function CreateMessage({ clientId }: Props) {
         <Group noWrap>
           <Autocomplete label="Topic Name" data={channel.map((chan) => chan.topic)} {...getInputProps('topic')} />
           <NumberInput w={80} label="Qos" {...getInputProps('qos')} />
-          <Switch align="content-center" label="Retain" {...getInputProps('retain', { type: 'checkbox' })} />
+          <Switch
+            label="Retain"
+            miw="max-content"
+            align="content-center"
+            {...getInputProps('retain', { type: 'checkbox' })}
+          />
         </Group>
         <Textarea label="Message" {...getInputProps('message')} />
         <div />

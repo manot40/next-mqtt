@@ -1,8 +1,8 @@
 import { memo } from 'react';
 
 import { useRouter } from 'next/router';
-import { useInstance } from 'stores';
 import { useDisclosure } from '@mantine/hooks';
+import { useInstance, useChannel, useMessage } from 'stores';
 
 import { IconTrash, IconDotsVertical, IconEdit } from '@tabler/icons';
 import { ActionIcon, Menu, Modal } from '@mantine/core';
@@ -15,9 +15,13 @@ const ActionMenu: React.FC<Props> = ({ name, clientOpts: opts }) => {
   const [modal, setModal] = useDisclosure(false);
 
   const deleteInstance = useInstance((state) => state.remove);
+  const deleteChannel = useChannel((state) => state.remove);
+  const deleteMessage = useMessage((state) => state.remove);
 
   const handleDelete = () => {
     deleteInstance(opts.clientId);
+    deleteChannel(opts.clientId);
+    deleteMessage(opts.clientId);
     replace('/');
   };
 

@@ -1,7 +1,9 @@
 import { Empty } from 'components/reusable';
 import { Flex, Stack } from '@mantine/core';
 import { IconError404 } from '@tabler/icons';
-import * as Instance from 'components/Instance';
+
+import { Meta } from 'components/Instance';
+import { ChanList } from 'components/Channel';
 
 type Props = {
   data: Instance | null;
@@ -19,8 +21,8 @@ export default function InstanceLayout({ data, children }: Props) {
   return (
     <Stack spacing={12}>
       <Stack spacing={42}>
-        <Instance.Meta {...data} />
-        <Instance.ChanList {...data} />
+        <Meta {...data} />
+        <ChanList {...data} />
       </Stack>
       {children}
     </Stack>

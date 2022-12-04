@@ -1,7 +1,7 @@
 import { createStyles, Container, Group, Text, Flex } from '@mantine/core';
 
-import InstanceTab from './InstancesTab';
 import ThemeToggler from './ThemeToggler';
+import { InstanceList } from './Instance';
 
 type HeaderTabsProps = {};
 
@@ -21,7 +21,7 @@ export default function Navigation({}: HeaderTabsProps) {
         </Flex>
       </Container>
       <Container>
-        <InstanceTab />
+        <InstanceList />
       </Container>
     </div>
   );

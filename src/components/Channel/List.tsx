@@ -11,7 +11,7 @@ import { IconFileBroken, IconPlus } from '@tabler/icons';
 
 type Props = {} & Instance;
 
-export default function ChanList({ clientOpts: opts }: Props) {
+export default function List({ clientOpts: opts }: Props) {
   const { push, pathname, query } = useRouter();
   const path = pathname.replace(/(\[clientId\])/, query.clientId as string).replace(/\/\[chanId\]/, '');
 
@@ -29,8 +29,11 @@ export default function ChanList({ clientOpts: opts }: Props) {
   return (
     <div>
       <Flex gap={8}>
-        <Tabs variant="pills" styles={tabStyle} defaultValue={query.chanId as string}>
+        <Tabs variant="pills" styles={tabStyle} defaultValue={(query.chanId as string) || 'all'}>
           <Tabs.List>
+            <Link href={path} style={{ textDecoration: 'none' }}>
+              <Tabs.Tab value="all">All Topic</Tabs.Tab>
+            </Link>
             {channels?.map((chan) => (
               <Link href={`${path}/${chan.topic}`} key={chan.topic} style={{ textDecoration: 'none' }}>
                 <Tabs.Tab value={chan.topic}>{chan.topic[0].toUpperCase() + chan.topic.slice(1)}</Tabs.Tab>
@@ -41,7 +44,7 @@ export default function ChanList({ clientOpts: opts }: Props) {
         <Flex h={24} py={16} align="center" onClick={setModal.open} style={{ cursor: 'pointer' }}>
           <IconPlus size={21} stroke={1.6} />
           {!channels && (
-            <Text ml={4} size={14} component="span">
+            <Text ml={4} size={14} component="span" style={{ userSelect: 'none' }}>
               New Channel
             </Text>
           )}

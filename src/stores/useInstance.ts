@@ -6,9 +6,9 @@ import { IDBStore } from './persistStore';
 
 type InstancesStore = {
   data: Instance[];
-  create: (name?: string, client?: Instance['clientOpts']) => void;
-  update: (name: string, instance: Instance) => void;
-  remove: (name: string) => void;
+  create: (id?: string, client?: Instance['clientOpts']) => void;
+  update: (id: string, instance: Instance) => void;
+  remove: (id: string) => void;
   search: (id: string, cb: (index: number, instance: Instance) => void) => any;
 };
 
@@ -16,12 +16,12 @@ export const instance = store<InstancesStore>()(
   persist(
     (set, get) => ({
       data: [],
-      create: (name: string = '', options: any) =>
+      create: (id = '', options: any) =>
         set({
           data: [
             ...get().data,
             {
-              name,
+              name: id,
               clientOpts: {
                 ssl: true,
                 port: 8884,
@@ -34,14 +34,14 @@ export const instance = store<InstancesStore>()(
             },
           ],
         }),
-      update: (id: string, instance: Instance) => {
+      update: (id, instance) => {
         const instances = get().data;
         get().search(id, (i) => {
           instances[i] = instance;
           set({ data: [...instances] });
         });
       },
-      remove: (id: string) => {
+      remove: (id) => {
         const instances = get().data;
         get().search(id, (i) => {
           instances.splice(i, 1);

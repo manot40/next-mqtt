@@ -108,7 +108,13 @@ export default function CreateInstance({ isEdit, defaultMetaValue, defaultWillVa
               <Stack spacing={8}>
                 <Group noWrap>
                   <NumberInput label="Keepalive" {...metaInputProps('keepalive')} />
-                  <Switch offLabel="OFF" onLabel="ON" label="SSL" {...metaInputProps('ssl', { type: 'checkbox' })} />
+                  <Switch
+                    onLabel="ON"
+                    offLabel="OFF"
+                    label="Secure"
+                    miw="max-content"
+                    {...metaInputProps('ssl', { type: 'checkbox' })}
+                  />
                 </Group>
                 <Group noWrap>
                   <TextInput w="100%" label="Last-Will Topic" {...willInputProps('topic')} />

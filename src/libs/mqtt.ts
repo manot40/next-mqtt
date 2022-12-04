@@ -22,7 +22,7 @@ export const connect = (opts: ClientOpts): Promise<MqttClientWithUtils> =>
       client.subChannels = function (id) {
         const clientId = id || this.options.clientId!;
 
-        channel.getState().data[clientId]!.forEach((chan) => {
+        channel.getState().data[clientId]?.forEach((chan) => {
           this.subscribe(chan.topic, { qos: chan.qos as any });
         });
 
