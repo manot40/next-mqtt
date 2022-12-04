@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { useChannel, useInstance } from 'stores';
 
 import { Card } from '@mantine/core';
-import { Empty } from 'components/resuable';
+import { Empty } from 'components/reusable';
 import InstanceLayout from 'layouts/InstanceLayout';
 
 import { IconClick } from '@tabler/icons';

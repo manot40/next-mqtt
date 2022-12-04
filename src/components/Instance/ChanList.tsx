@@ -3,7 +3,7 @@ import { useDisclosure } from '@mantine/hooks';
 import { useChannel, useSession } from 'stores';
 
 import Link from 'next/link';
-import { Empty } from 'components/resuable';
+import { Empty } from 'components/reusable';
 import { CreateChannel } from 'components/Channel';
 import { Card, Flex, Modal, Tabs, Text } from '@mantine/core';
 

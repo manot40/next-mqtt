@@ -1,5 +1,5 @@
 import { Card } from '@mantine/core';
-import { Empty } from 'components/resuable';
+import { Empty } from 'components/reusable';
 import { IconClick } from '@tabler/icons';
 
 export default function Home() {

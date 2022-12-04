@@ -1,4 +1,4 @@
-import { Empty } from 'components/resuable';
+import { Empty } from 'components/reusable';
 import { Flex, Stack } from '@mantine/core';
 import { IconError404 } from '@tabler/icons';
 import * as Instance from 'components/Instance';
