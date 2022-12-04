@@ -29,7 +29,7 @@ export default function List({ clientOpts: opts }: Props) {
   return (
     <div>
       <Flex gap={8}>
-        <Tabs variant="pills" styles={tabStyle} defaultValue={(query.chanId as string) || 'all'}>
+        <Tabs variant="pills" styles={tabStyle} value={(query.chanId as string) || 'all'}>
           <Tabs.List>
             <Link href={path} style={{ textDecoration: 'none' }}>
               <Tabs.Tab value="all">All Topic</Tabs.Tab>

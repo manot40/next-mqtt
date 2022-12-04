@@ -23,7 +23,7 @@ export default function InstanceList() {
 
   return (
     <Flex align="center" gap={8}>
-      <Tabs defaultValue={query.clientId as string} classNames={{ tab, tabsList }}>
+      <Tabs value={query.clientId as string} classNames={{ tab, tabsList }}>
         <Tabs.List>{TabItems}</Tabs.List>
       </Tabs>
       <Flex onClick={setModal.open} py={16} style={{ cursor: 'pointer' }} align="center" h={24}>
