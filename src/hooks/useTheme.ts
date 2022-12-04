@@ -21,7 +21,8 @@ export function useTheme() {
     }
   };
 
-  const theme = useMemo(() => (chosen === 'system' ? 'dark' : chosen), [chosen]);
+  // eslint-disable-next-line
+  const theme = useMemo(() => (chosen === 'system' ? defaultValue : chosen), [chosen]);
 
   return { theme, chosen, toggleTheme, setTheme };
 }
