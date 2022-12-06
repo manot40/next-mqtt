@@ -7,7 +7,7 @@ import * as Message from 'components/Message';
 import InstanceLayout from 'layouts/InstanceLayout';
 
 export default function ActiveInstance() {
-  const { query } = useRouter();
+  const { query, asPath } = useRouter();
 
   const instances = useInstance((state) => state.data);
 
@@ -16,11 +16,17 @@ export default function ActiveInstance() {
     [instances, query.clientId]
   );
 
+  const isGlobal = asPath.slice(-1) == '#';
+
   return (
     <InstanceLayout data={instance}>
       {instance && (
         <Flex direction={{ base: 'column', sm: 'row' }} gap={12}>
-          <Message.List channel={query.chanId as string} clientId={instance.clientOpts.clientId} />
+          <Message.List
+            global={isGlobal}
+            channel={query.channels as string[]}
+            clientId={instance.clientOpts.clientId}
+          />
         </Flex>
       )}
     </InstanceLayout>

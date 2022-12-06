@@ -12,8 +12,7 @@ import { IconFileBroken, IconPlus } from '@tabler/icons';
 type Props = {} & Instance;
 
 export default function List({ clientOpts: opts }: Props) {
-  const { push, pathname, query } = useRouter();
-  const path = pathname.replace(/(\[clientId\])/, query.clientId as string).replace(/\/\[chanId\]/, '');
+  const { push, query, asPath } = useRouter();
 
   const [modal, setModal] = useDisclosure(false);
 
@@ -22,20 +21,24 @@ export default function List({ clientOpts: opts }: Props) {
 
   const handleChannelCreated = (chan: Channel) => {
     session?.subscribe(chan.topic, { qos: chan.qos as any });
-    push(`${path}/${chan.topic}`);
+    push(`/${query.clientId}/${chan.topic}`);
     setModal.close();
   };
+
+  const currentChannel = isArr(query.channels)
+    ? `${query.channels.join('/')}${asPath.slice(-1) == '#' ? '/#' : ''}`
+    : 'all';
 
   return (
     <div>
       <Flex gap={8}>
-        <Tabs variant="pills" styles={tabStyle} defaultValue={(query.chanId as string) || 'all'}>
+        <Tabs variant="pills" styles={tabStyle} defaultValue={currentChannel}>
           <Tabs.List>
-            <Link href={path} style={{ textDecoration: 'none' }}>
+            <Link href={`/${query.clientId}`}>
               <Tabs.Tab value="all">All Topic</Tabs.Tab>
             </Link>
             {channels?.map((chan) => (
-              <Link href={`${path}/${chan.topic}`} key={chan.topic} style={{ textDecoration: 'none' }}>
+              <Link href={`/${query.clientId}/${chan.topic}`} key={chan.topic}>
                 <Tabs.Tab value={chan.topic}>{chan.topic[0].toUpperCase() + chan.topic.slice(1)}</Tabs.Tab>
               </Link>
             ))}
@@ -62,7 +65,9 @@ export default function List({ clientOpts: opts }: Props) {
   );
 }
 
+const isArr = Array.isArray;
+
 const tabStyle: { [key: string]: React.CSSProperties } = {
-  root: { overflowX: 'auto' },
+  root: { overflowX: 'auto', overflowY: 'hidden' },
   tabsList: { maxWidth: 'calc(100vw - 16px)', flexWrap: 'nowrap' },
 };

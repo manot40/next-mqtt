@@ -1,5 +1,6 @@
 import { createStyles, Container, Group, Text, Flex } from '@mantine/core';
 
+import Link from 'next/link';
 import ThemeToggler from './ThemeToggler';
 import { InstanceList } from './Instance';
 
@@ -13,7 +14,9 @@ export default function Navigation({}: HeaderTabsProps) {
       <Container className={classes.mainSection}>
         <Flex justify="space-between">
           <Group position="apart">
-            <Text weight={600}>FlexiMQ</Text>
+            <Link href="/">
+              <Text weight={600}>FlexiMQ</Text>
+            </Link>
           </Group>
           <Group position="apart">
             <ThemeToggler />

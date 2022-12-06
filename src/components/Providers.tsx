@@ -23,6 +23,7 @@ const themeFactory: (color: 'light' | 'dark') => MantineThemeOverride = (colorSc
   colorScheme,
   fontFamily: publicSans.style.fontFamily,
   globalStyles: (theme) => ({
+    a: { textDecoration: 'none', color: 'inherit' },
     body: { backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.colors.gray[0] },
   }),
 });

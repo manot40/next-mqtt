@@ -10,7 +10,7 @@ import { CreateInstance } from 'components/Instance';
 
 export default function InstanceList() {
   const { query } = useRouter();
-  const { tab, tabsList } = useStyles().classes;
+  const tabClasses = useStyles().classes;
   const [modal, setModal] = useDisclosure(false);
 
   const instances = useInstance((state) => state.data);
@@ -22,32 +22,37 @@ export default function InstanceList() {
   ));
 
   return (
-    <Flex align="center" gap={8}>
-      <Tabs defaultValue={query.clientId as string} classNames={{ tab, tabsList }}>
-        <Tabs.List>{TabItems}</Tabs.List>
-      </Tabs>
-      <Flex onClick={setModal.open} py={16} style={{ cursor: 'pointer' }} align="center" h={24}>
-        <IconPlus size={21} stroke={1.6} />
-        {!instances.length && (
-          <Text ml={4} size={14} component="span" style={{ userSelect: 'none' }}>
-            New Instance
-          </Text>
-        )}
+    <>
+      <Flex gap={8}>
+        <Tabs defaultValue={query.clientId as string} classNames={tabClasses}>
+          <Tabs.List>{TabItems}</Tabs.List>
+        </Tabs>
+        <Flex h={24} py={16} align="center" onClick={setModal.open} style={{ cursor: 'pointer' }}>
+          <IconPlus size={21} stroke={1.6} />
+          {!instances.length && (
+            <Text ml={4} size={14} component="span" style={{ userSelect: 'none' }}>
+              New Instance
+            </Text>
+          )}
+        </Flex>
       </Flex>
       <Modal title="New Instance" opened={modal} onClose={setModal.close}>
         <CreateInstance onSubmitted={setModal.close} />
       </Modal>
-    </Flex>
+    </>
   );
 }
 
 const useStyles = createStyles(() => ({
+  root: {
+    overflowX: 'auto',
+    overflowY: 'hidden',
+  },
+
   tabsList: {
+    flexWrap: 'nowrap',
     borderBottom: '0 !important',
-    '>a': {
-      color: 'inherit',
-      textDecoration: 'inherit',
-    },
+    maxWidth: 'calc(100vw - 16px)',
   },
 
   tab: {
