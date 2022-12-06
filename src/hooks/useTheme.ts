@@ -2,11 +2,11 @@ import { useMemo } from 'react';
 import { useLocalStorage, useColorScheme } from '@mantine/hooks';
 
 export function useTheme() {
-  const defaultValue = useColorScheme();
+  const systemTheme = useColorScheme();
 
   const [chosen, setTheme] = useLocalStorage<'light' | 'dark' | 'system'>({
     key: 'theme',
-    defaultValue,
+    defaultValue: 'system',
     getInitialValueInEffect: true,
   });
 
@@ -21,7 +21,8 @@ export function useTheme() {
     }
   };
 
-  const theme = useMemo(() => (chosen === 'system' ? 'dark' : chosen), [chosen]);
+  // eslint-disable-next-line
+  const theme = useMemo(() => (chosen === 'system' ? systemTheme : chosen), [chosen]);
 
   return { theme, chosen, toggleTheme, setTheme };
 }
