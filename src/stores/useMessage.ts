@@ -19,9 +19,9 @@ export const message = store<MessageStore>()(
       add: (id, message) => {
         set((state) => {
           const tmp = [...(state.data[id] || [])];
-          // if (tmp.length == 100) tmp.shift();
+          // if (tmp.length == 100) tmp.pop();
           // if (tmp.some((m) => m.epoch == message.epoch)) return state;
-          tmp.push(message);
+          tmp.unshift(message);
           return { data: { ...state.data, [id]: tmp } };
         });
       },

@@ -3,7 +3,7 @@ import mqtt from 'mqtt';
 import { channel, message } from 'stores';
 
 type MqttClientWithUtils = mqtt.Client & {
-  subChannels: (id?: string) => void;
+  subChannels: (id?: string) => MqttClientWithUtils;
 };
 
 export const connect = (opts: ClientOpts): Promise<MqttClientWithUtils> =>
@@ -33,6 +33,8 @@ export const connect = (opts: ClientOpts): Promise<MqttClientWithUtils> =>
             message: msg.toString(),
           });
         });
+
+        return this;
       };
 
       finish = true;

@@ -23,6 +23,7 @@
     "@mantine/notifications": "^5.9.0",
     "@next/font": "^13.0.5",
     "@tabler/icons": "^1.114.0",
+    "blockly": "^9.1.1",
     "idb-keyval": "^6.2.0",
     "mqtt": "^4.3.7",
     "next": "13.0.5",

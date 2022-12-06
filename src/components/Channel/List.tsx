@@ -2,7 +2,6 @@ import { useRouter } from 'next/router';
 import { useDisclosure } from '@mantine/hooks';
 import { useChannel, useSession } from 'stores';
 
-import Link from 'next/link';
 import { Empty } from 'components/reusable';
 import { CreateChannel } from 'components/Channel';
 import { Card, Flex, Modal, Tabs, Text } from '@mantine/core';
@@ -34,13 +33,13 @@ export default function List({ clientOpts: opts }: Props) {
       <Flex gap={8}>
         <Tabs variant="pills" styles={tabStyle} defaultValue={currentChannel}>
           <Tabs.List>
-            <Link href={`/${query.clientId}`}>
-              <Tabs.Tab value="all">All Topic</Tabs.Tab>
-            </Link>
+            <Tabs.Tab onClick={() => push(`/${query.clientId}`)} value="all">
+              All Topic
+            </Tabs.Tab>
             {channels?.map((chan) => (
-              <Link href={`/${query.clientId}/${chan.topic}`} key={chan.topic}>
-                <Tabs.Tab value={chan.topic}>{chan.topic[0].toUpperCase() + chan.topic.slice(1)}</Tabs.Tab>
-              </Link>
+              <Tabs.Tab key={chan.topic} value={chan.topic} onClick={() => push(`/${query.clientId}/${chan.topic}`)}>
+                {chan.topic}
+              </Tabs.Tab>
             ))}
           </Tabs.List>
         </Tabs>
