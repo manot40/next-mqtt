@@ -20,7 +20,7 @@ export default function ActiveInstance() {
     <InstanceLayout data={instance}>
       {instance && (
         <Flex direction={{ base: 'column', sm: 'row' }} gap={12}>
-          <Message.List clientId={instance.clientOpts.clientId} />
+          <Message.List global={true} clientId={instance.clientOpts.clientId} />
         </Flex>
       )}
     </InstanceLayout>
