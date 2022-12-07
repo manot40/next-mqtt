@@ -4,6 +4,7 @@ import { IconError404 } from '@tabler/icons';
 
 import { Meta } from 'components/Instance';
 import { ChanList } from 'components/Channel';
+import { TriggeredFunction } from 'components/Function';
 
 type Props = {
   data: Instance | null;
@@ -19,12 +20,15 @@ export default function InstanceLayout({ data, children }: Props) {
     );
 
   return (
-    <Stack spacing={12}>
-      <Stack spacing={42}>
-        <Meta {...data} />
-        <ChanList {...data} />
-      </Stack>
-      {children}
+    <Stack spacing={42}>
+      <Meta {...data} />
+      <Flex gap={18} direction={{ base: 'column', md: 'row' }}>
+        <Stack w="100%" spacing={12}>
+          <ChanList {...data} />
+          {children}
+        </Stack>
+        <TriggeredFunction />
+      </Flex>
     </Stack>
   );
 }

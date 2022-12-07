@@ -9,9 +9,10 @@ import { showNotification } from '@mantine/notifications';
 type Props = {
   initialXml?: string;
   config?: Blockly.BlocklyOptions;
-} & BoxProps;
+  onSubmit?: (code: string) => void;
+} & Omit<BoxProps, 'onSubmit'>;
 
-export function Workspace({ config, initialXml, children, ...rest }: Props) {
+export function Workspace({ config, initialXml, children, onSubmit, ...rest }: Props) {
   const { classes } = useStyles();
 
   const toolbox = useRef<HTMLDivElement | null>(null);
@@ -21,7 +22,8 @@ export function Workspace({ config, initialXml, children, ...rest }: Props) {
   const generateCode = (ws: Blockly.Workspace) => {
     try {
       const code = jsGen.workspaceToCode(ws);
-      alert(code);
+      console.log(code);
+      onSubmit?.(code);
     } catch (e: any) {
       showNotification({ title: 'Error', color: 'red', message: e.message });
     }
@@ -60,6 +62,10 @@ const useStyles = createStyles((t) => ({
   box: {
     height: 'calc(100vh - 120px)',
     position: 'relative',
+
+    'div.blocklyTreeRow': {
+      color: '#555',
+    },
   },
 
   button: {

@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { useDisclosure } from '@mantine/hooks';
 import { useInstance, useChannel, useMessage } from 'stores';
 
-import { IconTrash, IconDotsVertical, IconEdit } from '@tabler/icons';
+import { IconTrash, IconDotsVertical, IconEdit, IconLambda } from '@tabler/icons';
 import { ActionIcon, Menu, Modal } from '@mantine/core';
 import CreateInstance from './CreateInstance';
 
@@ -38,6 +38,13 @@ const ActionMenu: React.FC<Props> = ({ name, clientOpts: opts }) => {
           <Menu.Item icon={<IconEdit {...iconProps} />} onClick={setModal.open}>
             Edit Instance
           </Menu.Item>
+          <Menu.Item icon={<IconLambda {...iconProps} />} onClick={setModal.open}>
+            Functions
+          </Menu.Item>
+
+          <Menu.Divider />
+
+          <Menu.Label>Danger zone</Menu.Label>
           <Menu.Item color="red" icon={<IconTrash {...iconProps} />} onClick={handleDelete}>
             Delete Instance
           </Menu.Item>
@@ -55,6 +62,6 @@ const ActionMenu: React.FC<Props> = ({ name, clientOpts: opts }) => {
   );
 };
 
-const iconProps = { size: 18, stroke: 1.66 };
+const iconProps = { size: 18, stroke: 1.77 };
 
 export default memo(ActionMenu);

@@ -1,8 +1,10 @@
 import { Blockly } from 'components/reusable';
+import { triggerFunc } from 'libs/triggerFunc';
 
 export default function BlocklyTest() {
   return (
     <Blockly.Workspace
+      onSubmit={(s) => triggerFunc(s, { topic: 'ASD' })}
       config={{
         readOnly: false,
         trashcan: true,
@@ -28,6 +30,11 @@ export default function BlocklyTest() {
           <Blockly.Block key={i} {...block} />
         ))}
       </Blockly.Category>
+      <Blockly.Category colour="#228BE6" name="Objects">
+        {blocks.objects.map((block, i) => (
+          <Blockly.Block key={i} {...block} />
+        ))}
+      </Blockly.Category>
       <Blockly.Category colour="%{BKY_LISTS_HUE}" name="Lists">
         {blocks.lists.map((block, i) => (
           <Blockly.Block key={i} {...block} />
@@ -40,6 +47,11 @@ export default function BlocklyTest() {
       </Blockly.Category>
       <Blockly.Category colour="%{BKY_PROCEDURES_HUE}" name="Functions">
         {blocks.functions.map((block, i) => (
+          <Blockly.Block key={i} {...block} />
+        ))}
+      </Blockly.Category>
+      <Blockly.Category colour="180" name="Utilties">
+        {blocks.utilities.map((block, i) => (
           <Blockly.Block key={i} {...block} />
         ))}
       </Blockly.Category>
@@ -94,6 +106,14 @@ const blocks: { [cat: string]: Blockly.BlockProps[] } = {
     { type: 'text_print' },
     { type: 'text_prompt_ext' },
   ],
+  objects: [
+    { type: 'object_create' },
+    { type: 'object_get' },
+    { type: 'object_set' },
+    { type: 'object_keys' },
+    { type: 'object_stringify' },
+    { type: 'object_parse' },
+  ],
   lists: [
     { type: 'lists_create_with' },
     { type: 'lists_repeat' },
@@ -108,4 +128,5 @@ const blocks: { [cat: string]: Blockly.BlockProps[] } = {
   ],
   variables: [{ type: 'variables_set_dynamic' }, { type: 'variables_get_dynamic' }],
   functions: [{ type: 'procedures_defreturn' }, { type: 'procedures_defnoreturn' }, { type: 'procedures_ifreturn' }],
+  utilities: [{ type: 'fetch_api' }],
 };

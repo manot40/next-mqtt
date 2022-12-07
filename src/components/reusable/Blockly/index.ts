@@ -1,5 +1,7 @@
 import { createElement, memo } from 'react';
 
+import './custom_blocks';
+
 export { Workspace } from './Workspace';
 
 /* Block Section */
@@ -38,6 +40,7 @@ export type BlockType =
   | 'controls_repeat'
   | 'controls_repeat_ext'
   | 'controls_whileUntil'
+  | 'fetch_api'
   | 'lists_create_with'
   | 'lists_getIndex'
   | 'lists_getSublist'
@@ -68,6 +71,12 @@ export type BlockType =
   | 'math_round'
   | 'math_single'
   | 'math_trig'
+  | 'object_create'
+  | 'object_keys'
+  | 'object_get'
+  | 'object_set'
+  | 'object_parse'
+  | 'object_stringify'
   | 'text'
   | 'text_append'
   | 'text_changeCase'
