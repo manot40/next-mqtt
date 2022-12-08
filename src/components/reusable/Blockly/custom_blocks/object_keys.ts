@@ -3,7 +3,7 @@ import { javascriptGenerator as jsGen } from 'blockly/javascript';
 
 Blockly.Blocks['object_keys'] = {
   init: function () {
-    this.appendValueInput('OBJECT').setCheck('Object').appendField('Object Keys');
+    this.appendValueInput('OBJECT').setCheck('Object').appendField('get keys in object');
     this.setInputsInline(true);
     this.setOutput(true, 'Array');
     this.setColour('#228BE6');

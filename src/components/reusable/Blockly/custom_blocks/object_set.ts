@@ -3,9 +3,9 @@ import { javascriptGenerator as jsGen } from 'blockly/javascript';
 
 Blockly.Blocks['object_set'] = {
   init: function () {
-    this.appendValueInput('OBJECT').setCheck('Object').appendField('Set object');
-    this.appendValueInput('KEY').setCheck('String').appendField('with key');
-    this.appendValueInput('VALUE').setCheck(null).appendField('Value:');
+    this.appendValueInput('OBJECT').setCheck('Object').appendField('in object');
+    this.appendValueInput('VALUE').setCheck('String').appendField('set value');
+    this.appendValueInput('KEY').setCheck(null).appendField('to key');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setInputsInline(true);

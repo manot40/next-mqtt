@@ -8,11 +8,13 @@ const global = {};
 
 const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
 
-export const triggerFunc = (script: string, params = {} as FuncParams, cb?: (x: any) => void): void => {
-  const result = new AsyncFunction('{ topic, message, instance, global, ...rest } = {}', script).call(null, {
-    ...params,
-    global,
-  });
+export const triggerFunc = <T = any>(script: string, params: FuncParams, cb?: (x: T) => void): void => {
+  const ctx = { ...params };
+  Object.freeze(ctx);
 
-  cb?.(result);
+  const result: Promise<T> = new AsyncFunction('ctx, global', script).apply(null, [ctx, global]);
+
+  result.then(cb).catch((e) => {
+    alert(`Function runtime error:\n${e.message}`);
+  });
 };

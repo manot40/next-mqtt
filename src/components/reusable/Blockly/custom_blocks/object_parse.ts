@@ -3,7 +3,8 @@ import { javascriptGenerator as jsGen } from 'blockly/javascript';
 
 Blockly.Blocks['object_parse'] = {
   init: function () {
-    this.appendValueInput('OBJECT').setCheck('String').appendField('String to Object');
+    this.appendValueInput('OBJECT').setCheck('String').appendField('turn text');
+    this.appendDummyInput().appendField('into an object');
     this.setInputsInline(true);
     this.setOutput(true, null);
     this.setColour('#228BE6');

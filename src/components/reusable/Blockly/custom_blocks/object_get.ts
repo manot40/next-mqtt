@@ -3,8 +3,8 @@ import { javascriptGenerator as jsGen } from 'blockly/javascript';
 
 Blockly.Blocks['object_get'] = {
   init: function () {
-    this.appendValueInput('OBJECT').setCheck('Object').appendField('Get object');
-    this.appendValueInput('KEY').setCheck('String').appendField('value, with key');
+    this.appendValueInput('OBJECT').setCheck('Object').appendField('in object');
+    this.appendValueInput('KEY').setCheck('String').appendField('get value, with key');
     this.setInputsInline(true);
     this.setOutput(true, null);
     this.setColour('#228BE6');

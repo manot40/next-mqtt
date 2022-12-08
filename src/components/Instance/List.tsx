@@ -47,7 +47,10 @@ const useStyles = createStyles(() => ({
   root: {
     overflowX: 'auto',
     overflowY: 'hidden',
-    minHeight: 'fit-content',
+  },
+
+  button: {
+    maxHeight: '100%',
   },
 
   tabsList: {
