@@ -1,8 +1,9 @@
 import { useForm } from '@mantine/form';
-import { useSession, useChannel } from 'stores';
+import { useSession } from 'stores';
 
-import { Group, NumberInput, Stack, TextInput, Textarea, Autocomplete, Switch, Button } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
+import { TopicAutocomplete } from 'components/reusable';
+import { Group, NumberInput, Stack, Textarea, Switch, Button } from '@mantine/core';
 
 type Props = {
   clientId: string;
@@ -10,7 +11,6 @@ type Props = {
 
 export default function CreateMessage({ clientId }: Props) {
   const session = useSession((state) => state.data)[clientId]!;
-  const channel = useChannel((state) => state.data)[clientId]!;
 
   const { onSubmit, getInputProps } = useForm<Topic>({
     initialValues: {
@@ -37,7 +37,7 @@ export default function CreateMessage({ clientId }: Props) {
     <form onSubmit={onSubmit(handleSubmit)}>
       <Stack spacing={12}>
         <Group noWrap>
-          <Autocomplete label="Topic Name" data={channel.map((chan) => chan.topic)} {...getInputProps('topic')} />
+          <TopicAutocomplete label="Topic Name" clientId={clientId} {...getInputProps('topic')} />
           <NumberInput w={80} label="Qos" {...getInputProps('qos')} />
           <Switch
             label="Retain"

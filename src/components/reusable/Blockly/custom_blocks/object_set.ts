@@ -20,11 +20,12 @@ jsGen['object_set'] = function (block: Blockly.Block) {
   // .split('.')
   // .reduce((acc: string, curr: string) => `${acc}[${curr}]`, '');
 
-  const value = jsGen.valueToCode(block, 'VALUE', jsGen.ORDER_ATOMIC);
+  let value = jsGen.valueToCode(block, 'VALUE', jsGen.ORDER_ATOMIC);
+  if (value?.replace(/['"]+/g, '')[0].search(/(\{|\[)/) > -1) value = `JSON.parse(${value})`;
 
   if (!key) throw new Error('Key is required');
   if (!object) throw new Error('Object is required');
   if (!value) throw new Error('Value is required');
 
-  return `(${object})${'.' + key} = ${value}[0].search(/(\\{|\\[)/) == -1 ? ${value} : JSON.parse(${value});\n`;
+  return `(${object})${'.' + key} = ${value};\n`;
 };

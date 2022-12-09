@@ -1,2 +1,3 @@
-export { default as Empty } from './Empty';
 export * as Blockly from './Blockly';
+export { Empty } from './Empty';
+export { TopicAutocomplete } from './TopicAutocomplete';

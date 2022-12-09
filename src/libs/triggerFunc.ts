@@ -1,4 +1,4 @@
-type FuncParams = {
+export type FuncParams = {
   topic?: string;
   message?: string;
   instance?: string;

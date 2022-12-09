@@ -1,18 +1,16 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 
 import { useRouter } from 'next/router';
-import { useDisclosure } from '@mantine/hooks';
 import { useInstance, useChannel, useMessage } from 'stores';
 
-import { IconTrash, IconDotsVertical, IconEdit, IconLambda } from '@tabler/icons';
-import { ActionIcon, Menu, Modal } from '@mantine/core';
 import CreateInstance from './CreateInstance';
+import { FunctionEditor } from 'components/Function';
+import { ActionIcon, Menu, Modal } from '@mantine/core';
+import { IconTrash, IconDotsVertical, IconEdit, IconLambda } from '@tabler/icons';
 
-type Props = {} & Instance;
-
-const ActionMenu: React.FC<Props> = ({ name, clientOpts: opts }) => {
+const ActionMenu: React.FC<Instance> = ({ name, clientOpts: opts }) => {
   const { replace } = useRouter();
-  const [modal, setModal] = useDisclosure(false);
+  const [modal, setModal] = useState<'instance' | 'function'>();
 
   const deleteInstance = useInstance((state) => state.remove);
   const deleteChannel = useChannel((state) => state.remove);
@@ -35,10 +33,10 @@ const ActionMenu: React.FC<Props> = ({ name, clientOpts: opts }) => {
         </Menu.Target>
 
         <Menu.Dropdown>
-          <Menu.Item icon={<IconEdit {...iconProps} />} onClick={setModal.open}>
+          <Menu.Item icon={<IconEdit {...iconProps} />} onClick={() => setModal('instance')}>
             Edit Instance
           </Menu.Item>
-          <Menu.Item icon={<IconLambda {...iconProps} />} onClick={setModal.open}>
+          <Menu.Item icon={<IconLambda {...iconProps} />} onClick={() => setModal('function')}>
             Functions
           </Menu.Item>
 
@@ -50,17 +48,26 @@ const ActionMenu: React.FC<Props> = ({ name, clientOpts: opts }) => {
           </Menu.Item>
         </Menu.Dropdown>
       </Menu>
-      <Modal title={`Edit ${name}`} opened={modal} onClose={setModal.close}>
-        <CreateInstance
-          isEdit
-          onSubmitted={setModal.close}
-          defaultWillValue={opts.will}
-          defaultMetaValue={{ name, ...opts }}
-        />
-      </Modal>
+      <InstanceEditor name={name} opts={opts} active={modal === 'instance'} onClose={() => setModal(undefined)} />
+      <FunctionEditor name={name} opts={opts} active={modal === 'function'} onClose={() => setModal(undefined)} />
     </>
   );
 };
+
+type InstanceEditorProps = {
+  name: string;
+  opts: ClientOpts;
+  active: boolean;
+  onClose: () => void;
+};
+
+function InstanceEditor({ name, opts, active, onClose }: InstanceEditorProps) {
+  return (
+    <Modal title={`Edit ${name}`} opened={active} onClose={onClose}>
+      <CreateInstance isEdit onSubmitted={onClose} defaultWillValue={opts.will} defaultMetaValue={{ name, ...opts }} />
+    </Modal>
+  );
+}
 
 const iconProps = { size: 18, stroke: 1.77 };
 

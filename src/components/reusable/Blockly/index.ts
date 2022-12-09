@@ -101,4 +101,6 @@ export type BlockType =
   | 'procedures_defreturn'
   | 'procedures_ifreturn'
   | 'procedures_mutatorcontainer'
-  | 'procedures_mutatorarg';
+  | 'procedures_mutatorarg'
+  | 'procedures_callnoreturn'
+  | 'procedures_callreturn';

@@ -1,3 +1,5 @@
+import { memo } from 'react';
+
 import { Flex, Stack, Text } from '@mantine/core';
 
 import { IconEggCracked, type TablerIcon } from '@tabler/icons';
@@ -8,7 +10,7 @@ type Props = {
   message?: React.ReactNode;
 };
 
-const Empty = ({ Icon = IconEggCracked, title, message }: Props) => (
+const Component = ({ Icon = IconEggCracked, title, message }: Props) => (
   <Flex mih={360} justify="center" align="center">
     <Flex gap={12} direction="column" align="center">
       <Icon size={64} stroke={1.2} opacity={0.5} />
@@ -26,4 +28,4 @@ const Empty = ({ Icon = IconEggCracked, title, message }: Props) => (
   </Flex>
 );
 
-export default Empty;
+export const Empty = memo(Component);
