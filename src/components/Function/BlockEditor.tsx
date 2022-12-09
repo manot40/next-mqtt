@@ -1,19 +1,44 @@
-import { memo } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
+
+import { showNotification } from '@mantine/notifications';
+import useScript, { type ScriptDefinition } from 'stores/useScript';
 
 import Meta from './Meta';
-import { Blockly } from 'components/reusable';
 import { Stack } from '@mantine/core';
+import { Blockly } from 'components/reusable';
 
 type Props = {
+  script?: ScriptDefinition;
   clientId: string;
 };
 
-const Component: React.FC<Props> = ({ clientId }) => {
+const Component: React.FC<Props> = ({ script, clientId }) => {
+  const [data, setData] = useState({} as ScriptDefinition);
+
+  const [add, update] = useScript((state) => [state.add, state.update]);
+
+  useEffect(() => {
+    if (script) setData(script);
+  }, [script]);
+
+  const handleSave = (_script: string, template: string) => {
+    const toBeSaved = { ...data, script: _script, template };
+    if (script) {
+      update(clientId, script.id, toBeSaved);
+    } else {
+      toBeSaved.id = crypto.getRandomValues(new Uint32Array(1))[0].toString(16);
+      add(clientId, toBeSaved);
+    }
+    showNotification({ title: 'Saved', message: 'Script saved successfully', color: 'green' });
+  };
+
   return (
     <Stack w="100%">
-      <Meta clientId={clientId} />
+      <Meta clientId={clientId} value={data} onChange={(meta) => setData((prev) => ({ ...prev, ...meta }))} />
       <Blockly.Workspace
-        onSubmit={console.log}
+        scriptParams={data}
+        initialXml={script?.template}
+        onSubmit={handleSave}
         config={{
           readOnly: false,
           trashcan: true,

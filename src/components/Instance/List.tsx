@@ -49,10 +49,6 @@ const useStyles = createStyles(() => ({
     overflowY: 'hidden',
   },
 
-  button: {
-    maxHeight: '100%',
-  },
-
   tabsList: {
     flexWrap: 'nowrap',
     borderBottom: '0 !important',
@@ -60,7 +56,7 @@ const useStyles = createStyles(() => ({
   },
 
   tab: {
-    height: 38,
+    height: '100%',
     fontWeight: 400,
     borderBottom: 1,
     backgroundColor: 'transparent',

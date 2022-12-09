@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { memo, useEffect, useRef } from 'react';
 
 import Blockly, { Xml } from 'blockly';
 import { javascriptGenerator as jsGen } from 'blockly/javascript';
@@ -16,7 +16,7 @@ type Props = {
   onSubmit?: (code: string, xml: string) => void;
 } & Omit<BoxProps, 'onSubmit'>;
 
-export function Workspace({ config, initialXml, children, onSubmit, scriptParams = {}, ...rest }: Props) {
+const Component: React.FC<Props> = ({ config, initialXml, children, onSubmit, scriptParams = {}, ...rest }: Props) => {
   const { classes } = useStyles();
 
   const toolbox = useRef<HTMLDivElement | null>(null);
@@ -44,7 +44,8 @@ export function Workspace({ config, initialXml, children, onSubmit, scriptParams
 
       return () => blockly.current?.dispose();
     }
-  }, [blockly, workspace, toolbox, initialXml, config]);
+    // eslint-disable-next-line
+  }, [blockly, workspace, toolbox]);
 
   return (
     <>
@@ -69,7 +70,9 @@ export function Workspace({ config, initialXml, children, onSubmit, scriptParams
       </Box>
     </>
   );
-}
+};
+
+export const Workspace = memo(Component);
 
 const useStyles = createStyles((t) => ({
   box: {

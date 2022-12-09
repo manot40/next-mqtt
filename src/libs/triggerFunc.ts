@@ -1,7 +1,6 @@
 export type FuncParams = {
   topic?: string;
   message?: string;
-  instance?: string;
 } & { [key: string]: unknown };
 
 const global = {};

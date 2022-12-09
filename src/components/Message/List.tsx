@@ -4,6 +4,7 @@ import { useMessage } from 'stores';
 import { Empty } from 'components/reusable';
 import { IconMessageDots } from '@tabler/icons';
 import { Card, Text, Stack, Flex, Badge } from '@mantine/core';
+import { matchTopic } from 'utils';
 
 type Props = {
   global: boolean;
@@ -17,23 +18,7 @@ export default function MessageList({ global, channel: _channel, clientId }: Pro
   const channel = useMemo(() => (global && _channel ? [..._channel, '#'] : _channel), [global, _channel]);
 
   const messages = useMemo(
-    () =>
-      channel
-        ? messageStore?.filter((message) => {
-            const result = [] as boolean[];
-            const topic = message.topic.split('/');
-
-            for (const i in topic)
-              if (channel[i] === '#') {
-                result.push(true);
-                break;
-              } else {
-                result.push(topic[i] === channel[i]);
-              }
-
-            return result.every((value) => value);
-          })
-        : messageStore,
+    () => (channel ? messageStore?.filter((message) => matchTopic(message.topic, channel.join('/'))) : messageStore),
     // eslint-disable-next-line
     [messageStore, channel]
   );
