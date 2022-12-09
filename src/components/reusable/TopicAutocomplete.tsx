@@ -9,8 +9,8 @@ type Props = {
 } & Omit<AutocompleteProps, 'data'>;
 
 const Component = ({ clientId, ...rest }: Props) => {
-  const channel = useChannel((state) => state.data)[clientId]!;
-  return <Autocomplete {...rest} data={channel.map((chan) => chan.topic)} />;
+  const channel = useChannel((state) => state.data)[clientId];
+  return <Autocomplete {...rest} data={(channel || []).map((chan) => chan.topic)} />;
 };
 
 export const TopicAutocomplete = memo(Component);
