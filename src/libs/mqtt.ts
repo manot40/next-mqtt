@@ -41,6 +41,7 @@ export const connect = (opts: ClientOpts): Promise<MqttClientWithUtils> =>
           this.subscribe(chan.topic, { qos: chan.qos as any });
         });
 
+        // TODO: Prevent duplicate message when sending from the same client
         this.on('message', (topic, msg) => {
           const _message = msg.toString();
           const payload = { runOn: 'message' as any, topic, message: _message };

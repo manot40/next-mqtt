@@ -43,11 +43,17 @@ export const script = store<ScriptStore>()(
 
       get(instance, criteria) {
         return get().data[instance]?.filter((f) => {
+          const result = [] as boolean[];
+
           if (criteria.runOn === 'message' && f.runOn === 'message') {
-            if (f.topic && criteria.topic) return matchTopic(f.topic, criteria.topic);
-            if (f.message && criteria.message) return f.message.includes(criteria.message);
-            return true;
-          } else return criteria.runOn === f.runOn;
+            if (f.topic && criteria.topic) result.push(matchTopic(f.topic, criteria.topic));
+            if (f.message && criteria.message) result.push(criteria.message.includes(f.message));
+            result.push(true);
+          } else {
+            result.push(criteria.runOn === f.runOn);
+          }
+
+          return result.every((r) => r);
         });
       },
 
