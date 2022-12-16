@@ -4,16 +4,12 @@ import { MantineProvider, type MantineThemeOverride } from '@mantine/core';
 
 import { useTheme } from 'hooks';
 
-import AuthProvider from 'components/AuthContext';
-
 export default function Providers({ children }: { children: React.ReactNode }) {
   const { theme } = useTheme();
   return (
-    <AuthProvider>
-      <MantineProvider withGlobalStyles withNormalizeCSS theme={themeFactory(theme)}>
-        <NotificationsProvider>{children}</NotificationsProvider>
-      </MantineProvider>
-    </AuthProvider>
+    <MantineProvider withGlobalStyles withNormalizeCSS theme={themeFactory(theme)}>
+      <NotificationsProvider>{children}</NotificationsProvider>
+    </MantineProvider>
   );
 }
 

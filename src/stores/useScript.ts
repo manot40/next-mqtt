@@ -2,22 +2,26 @@ import create from 'zustand';
 import store from 'zustand/vanilla';
 import { persist } from 'zustand/middleware';
 
+import { matchTopic } from 'utils';
 import { IDBStore } from './persistStore';
 
 export type ScriptDefinition = {
   id: string;
   name: string;
-  when: 'connected' | 'disconnected' | 'message';
+  runOn: 'connected' | 'disconnected' | 'message';
   script: string;
   template: string;
   topic?: string;
   message?: string;
 };
 
+type SearchCriteria = Pick<ScriptDefinition, 'message' | 'runOn' | 'topic'>;
+
 type ScriptStore = {
   data: {
     [instance: string]: ScriptDefinition[] | undefined;
   };
+  get: (instance: string, search: SearchCriteria) => ScriptDefinition[] | undefined;
   add: (instance: string, func: ScriptDefinition) => void;
   update: (instance: string, id: string, func: ScriptDefinition) => void;
   remove: (instance: string, id?: string) => void;
@@ -25,9 +29,20 @@ type ScriptStore = {
 
 export const script = store<ScriptStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       data: {},
-      add: (instance, func) => {
+
+      get(instance, criteria) {
+        return get().data[instance]?.filter((f) => {
+          if (criteria.runOn === 'message' && f.runOn === 'message') {
+            if (f.topic && criteria.topic) return matchTopic(f.topic, criteria.topic);
+            if (f.message && criteria.message) return f.message.includes(criteria.message);
+            return true;
+          } else return criteria.runOn === f.runOn;
+        });
+      },
+
+      add(instance, func) {
         set((state) => ({
           data: {
             ...state.data,
@@ -35,18 +50,20 @@ export const script = store<ScriptStore>()(
           },
         }));
       },
-      update: (instance, id, func) => {
+
+      update(instance, id, func) {
         set((state) => ({
           data: {
             ...state.data,
-            [instance]: state.data[instance]!.map((f) => (f.name === id ? func : f)),
+            [instance]: state.data[instance]!.map((f) => (f.id === id ? func : f)),
           },
         }));
       },
-      remove: (instance, id) => {
+
+      remove(instance, id) {
         set((state) => {
           if (!id) delete state.data[instance];
-          else state.data[instance] = state.data[instance]!.filter((f) => f.name !== id);
+          else state.data[instance] = state.data[instance]!.filter((f) => f.id !== id);
           return { data: { ...state.data } };
         });
       },

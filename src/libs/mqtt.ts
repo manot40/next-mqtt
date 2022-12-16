@@ -1,6 +1,7 @@
 import mqtt from 'mqtt';
 
-import { channel, message } from 'stores';
+import { triggerFunc } from './triggerFunc';
+import { channel, message, script } from 'stores';
 
 type MqttClientWithUtils = mqtt.Client & {
   subChannels: (id?: string) => MqttClientWithUtils;
@@ -19,6 +20,12 @@ export const connect = (opts: ClientOpts): Promise<MqttClientWithUtils> =>
     mqttClient.once('connect', () => {
       const client = mqttClient as MqttClientWithUtils;
 
+      // Execute all 'onconnect' scripts
+      script
+        .getState()
+        .get(opts.clientId, { runOn: 'connected' })
+        ?.forEach((data) => triggerFunc(data.script, {}));
+
       client.subChannels = function (id) {
         const clientId = id || this.options.clientId!;
 
@@ -27,12 +34,26 @@ export const connect = (opts: ClientOpts): Promise<MqttClientWithUtils> =>
         });
 
         this.on('message', (topic, msg) => {
+          const _message = msg.toString();
+
+          script
+            .getState()
+            .get(opts.clientId, { runOn: 'message', topic, message: _message })
+            ?.forEach((data) => triggerFunc(data.script, { topic, message: _message }));
+
           message.getState().add(clientId, {
             topic,
             epoch: Date.now(),
-            message: msg.toString(),
+            message: _message,
           });
         });
+
+        this.once('end', () =>
+          script
+            .getState()
+            .get(opts.clientId, { runOn: 'disconnected' })
+            ?.forEach((data) => triggerFunc(data.script, {}))
+        );
 
         return this;
       };

@@ -8,23 +8,23 @@ import { Stack } from '@mantine/core';
 import { Blockly } from 'components/reusable';
 
 type Props = {
-  script?: ScriptDefinition;
+  focus?: ScriptDefinition;
   clientId: string;
 };
 
-const Component: React.FC<Props> = ({ script, clientId }) => {
+const Component: React.FC<Props> = ({ focus, clientId }) => {
   const [data, setData] = useState({} as ScriptDefinition);
 
   const [add, update] = useScript((state) => [state.add, state.update]);
 
   useEffect(() => {
-    if (script) setData(script);
-  }, [script]);
+    setData(focus || ({} as ScriptDefinition));
+  }, [focus]);
 
   const handleSave = (_script: string, template: string) => {
     const toBeSaved = { ...data, script: _script, template };
-    if (script) {
-      update(clientId, script.id, toBeSaved);
+    if (focus) {
+      update(clientId, focus.id, toBeSaved);
     } else {
       toBeSaved.id = crypto.getRandomValues(new Uint32Array(1))[0].toString(16);
       add(clientId, toBeSaved);
@@ -36,9 +36,9 @@ const Component: React.FC<Props> = ({ script, clientId }) => {
     <Stack w="100%">
       <Meta clientId={clientId} value={data} onChange={(meta) => setData((prev) => ({ ...prev, ...meta }))} />
       <Blockly.Workspace
-        scriptParams={data}
-        initialXml={script?.template}
+        xmlData={focus?.template}
         onSubmit={handleSave}
+        scriptParams={data}
         config={{
           readOnly: false,
           trashcan: true,
@@ -93,6 +93,8 @@ const Component: React.FC<Props> = ({ script, clientId }) => {
     </Stack>
   );
 };
+
+export default memo(Component);
 
 const blocks: { [cat: string]: Blockly.BlockProps[] } = {
   logic: [
@@ -171,5 +173,3 @@ const blocks: { [cat: string]: Blockly.BlockProps[] } = {
   ],
   utilities: [{ type: 'fetch_api' }],
 };
-
-export default memo(Component);

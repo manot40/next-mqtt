@@ -1,15 +1,17 @@
 export function matchTopic(test: string, against: string) {
   const result = [] as boolean[];
-  const topicA = test.split('/');
-  const topicB = against.split('/');
+  const a = test.split('/');
+  const b = against.split('/');
 
-  for (const i in topicA)
-    if (topicB[i] === '#') {
+  let isWildcard = false;
+  for (const i in a)
+    if (b[i] === '#') {
       result.push(true);
+      isWildcard = true;
       break;
     } else {
-      result.push(topicA[i] === topicB[i]);
+      result.push(a[i] === b[i]);
     }
 
-  return result.every((value) => value);
+  return (isWildcard || a.length == b.length) && result.every((value) => value);
 }

@@ -18,7 +18,7 @@ export default function Meta({ name, clientOpts: opts }: Props) {
   const session = useSession((state) => state.data)[opts.clientId];
   const [addClient, removeClient] = useSession((state) => [state.add, state.remove]);
 
-  const createConnection = async () => {
+  const handleConnection = async () => {
     try {
       setLoading(true);
       if (session) {
@@ -61,7 +61,7 @@ export default function Meta({ name, clientOpts: opts }: Props) {
         </Stack>
 
         <Group spacing={12}>
-          <Button loading={loading} onClick={createConnection} color={session ? 'red' : 'blue'} size="sm">
+          <Button loading={loading} onClick={handleConnection} color={session ? 'red' : 'blue'} size="sm">
             {session ? 'Disconnect' : 'Connect'}
           </Button>
           {session && (

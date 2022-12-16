@@ -11,17 +11,39 @@ import { Box, Button, createStyles, Group, type BoxProps } from '@mantine/core';
 
 type Props = {
   scriptParams?: FuncParams;
-  initialXml?: string;
+  xmlData?: string;
   config?: Blockly.BlocklyOptions;
   onSubmit?: (code: string, xml: string) => void;
 } & Omit<BoxProps, 'onSubmit'>;
 
-const Component: React.FC<Props> = ({ config, initialXml, children, onSubmit, scriptParams = {}, ...rest }: Props) => {
+const Component: React.FC<Props> = ({ config, xmlData, children, onSubmit, scriptParams = {}, ...rest }: Props) => {
   const { classes } = useStyles();
 
   const toolbox = useRef<HTMLDivElement | null>(null);
   const blockly = useRef<Blockly.WorkspaceSvg | null>(null);
   const workspace = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (workspace.current != null && toolbox.current != null) {
+      blockly.current = Blockly.inject(workspace.current, {
+        toolbox: toolbox.current,
+        ...config,
+      });
+
+      return () => blockly.current!.dispose();
+    }
+    // eslint-disable-next-line
+  }, [blockly, workspace, toolbox]);
+
+  useEffect(() => {
+    if (blockly.current) {
+      blockly.current.clear();
+      if (typeof xmlData == 'string') {
+        const xml = Xml.textToDom(xmlData);
+        Xml.domToWorkspace(xml, blockly.current);
+      }
+    }
+  }, [xmlData]);
 
   const executeScript = (ws: Blockly.Workspace, save: boolean) => {
     try {
@@ -33,23 +55,9 @@ const Component: React.FC<Props> = ({ config, initialXml, children, onSubmit, sc
     }
   };
 
-  useEffect(() => {
-    if (workspace.current != null && toolbox.current != null) {
-      blockly.current = Blockly.inject(workspace.current, {
-        toolbox: toolbox.current,
-        ...config,
-      });
-
-      if (initialXml) Xml.domToWorkspace(Xml.textToDom(initialXml), blockly.current);
-
-      return () => blockly.current?.dispose();
-    }
-    // eslint-disable-next-line
-  }, [blockly, workspace, toolbox]);
-
   return (
     <>
-      <Box {...rest} className={`${classes.box} ${rest.className}`} ref={workspace}>
+      <Box {...rest} className={`${classes.box} ${rest.className || ''}`} ref={workspace}>
         <Group spacing={8} className={classes.action}>
           <Button
             variant="subtle"

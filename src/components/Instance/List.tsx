@@ -1,3 +1,4 @@
+import { useMemo, useState, useEffect } from 'react';
 import { useInstance } from 'stores';
 import { useRouter } from 'next/router';
 import { useDisclosure } from '@mantine/hooks';
@@ -13,23 +14,31 @@ export default function InstanceList() {
   const tabClasses = useStyles().classes;
   const [modal, setModal] = useDisclosure(false);
 
-  const instances = useInstance((state) => state.data);
+  // This is a workaround for the hydration issue
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
 
-  const TabItems = instances.map(({ name, clientOpts }) => (
-    <Link href={`/${clientOpts.clientId}`} key={clientOpts.clientId}>
-      <Tabs.Tab value={clientOpts.clientId}>{name || 'Blank'}</Tabs.Tab>
-    </Link>
-  ));
+  const instances = useInstance((state) => state.data);
+  const TabItems = useMemo(
+    () =>
+      hydrated &&
+      instances.map(({ name, clientOpts }) => (
+        <Link href={`/${clientOpts.clientId}`} key={clientOpts.clientId}>
+          <Tabs.Tab value={clientOpts.clientId}>{name || 'Blank'}</Tabs.Tab>
+        </Link>
+      )),
+    [hydrated, instances]
+  );
 
   return (
     <>
       <Flex gap={8}>
-        <Tabs defaultValue={query.clientId as string} classNames={tabClasses}>
+        <Tabs value={query.clientId as string} classNames={tabClasses}>
           <Tabs.List>{TabItems}</Tabs.List>
         </Tabs>
         <Flex h={24} py={16} align="center" onClick={setModal.open} style={{ cursor: 'pointer' }}>
           <IconPlus size={21} stroke={1.6} />
-          {!instances.length && (
+          {!TabItems && (
             <Text ml={4} size={14} component="span" style={{ userSelect: 'none' }}>
               New Instance
             </Text>
