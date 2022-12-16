@@ -16,7 +16,8 @@ export const instance = store<InstancesStore>()(
   persist(
     (set, get) => ({
       data: [],
-      create: (id = '', options: any) =>
+
+      create(id = '', options: any) {
         set({
           data: [
             ...get().data,
@@ -33,22 +34,26 @@ export const instance = store<InstancesStore>()(
               },
             },
           ],
-        }),
-      update: (id, instance) => {
+        });
+      },
+
+      update(id, instance) {
         const instances = get().data;
         get().search(id, (i) => {
           instances[i] = instance;
           set({ data: [...instances] });
         });
       },
-      remove: (id) => {
+
+      remove(id) {
         const instances = get().data;
         get().search(id, (i) => {
           instances.splice(i, 1);
           set({ data: [...instances] });
         });
       },
-      search: (id, cb) => {
+
+      search(id, cb) {
         const instances = get().data;
         const index = instances.findIndex((instance) => instance.clientOpts.clientId === id);
         if (index == -1) throw new Error('Instance not found');

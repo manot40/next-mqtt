@@ -14,23 +14,32 @@ export type ScriptDefinition = {
   topic?: string;
   message?: string;
 };
-
-type SearchCriteria = Pick<ScriptDefinition, 'message' | 'runOn' | 'topic'>;
+type ScriptKind = Pick<ScriptDefinition, 'message' | 'runOn' | 'topic'>;
+type ScriptHistory = ScriptKind & { time: number; name: string };
 
 type ScriptStore = {
   data: {
     [instance: string]: ScriptDefinition[] | undefined;
   };
-  get: (instance: string, search: SearchCriteria) => ScriptDefinition[] | undefined;
+  history: {
+    [instance: string]: ScriptHistory[] | undefined;
+  };
+
+  // Data mutator
+  get: (instance: string, search: ScriptKind) => ScriptDefinition[] | undefined;
   add: (instance: string, func: ScriptDefinition) => void;
   update: (instance: string, id: string, func: ScriptDefinition) => void;
   remove: (instance: string, id?: string) => void;
+
+  // History mutator
+  addHistory: (instance: string, func: ScriptHistory) => void;
 };
 
 export const script = store<ScriptStore>()(
   persist(
     (set, get) => ({
       data: {},
+      history: {},
 
       get(instance, criteria) {
         return get().data[instance]?.filter((f) => {
@@ -46,7 +55,7 @@ export const script = store<ScriptStore>()(
         set((state) => ({
           data: {
             ...state.data,
-            [instance]: [...(state.data[instance] || []), func],
+            [instance]: [func, ...(state.data[instance] || [])],
           },
         }));
       },
@@ -66,6 +75,15 @@ export const script = store<ScriptStore>()(
           else state.data[instance] = state.data[instance]!.filter((f) => f.id !== id);
           return { data: { ...state.data } };
         });
+      },
+
+      addHistory(instance, func) {
+        set((state) => ({
+          history: {
+            ...state.history,
+            [instance]: [func, ...(state.history[instance] || [])],
+          },
+        }));
       },
     }),
     {

@@ -17,7 +17,8 @@ export const channel = store<ChannelStore>()(
   persist(
     (set) => ({
       data: {},
-      add: (id, channel) => {
+
+      add(id, channel) {
         set((state) => ({
           data: {
             ...state.data,
@@ -25,7 +26,8 @@ export const channel = store<ChannelStore>()(
           },
         }));
       },
-      update: (id, topic, channel) => {
+
+      update(id, topic, channel) {
         set((state) => ({
           data: {
             ...state.data,
@@ -33,7 +35,8 @@ export const channel = store<ChannelStore>()(
           },
         }));
       },
-      remove: (id) => {
+
+      remove(id) {
         set((state) => {
           delete state.data[id];
           return { data: { ...state.data } };

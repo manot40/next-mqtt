@@ -27,7 +27,7 @@ export default function InstanceLayout({ data, children }: Props) {
           <ChanList {...data} />
           {children}
         </Stack>
-        <TriggeredFunction />
+        <TriggeredFunction instance={data.clientOpts.clientId} />
       </Flex>
     </Stack>
   );

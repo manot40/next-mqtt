@@ -16,7 +16,8 @@ export const message = store<MessageStore>()(
   persist(
     (set) => ({
       data: {},
-      add: (id, message) => {
+
+      add(id, message) {
         set((state) => {
           const tmp = [...(state.data[id] || [])];
           // if (tmp.length == 100) tmp.pop();
@@ -25,7 +26,8 @@ export const message = store<MessageStore>()(
           return { data: { ...state.data, [id]: tmp } };
         });
       },
-      remove: (id) => {
+
+      remove(id) {
         set((state) => {
           delete state.data[id];
           return { data: { ...state.data } };

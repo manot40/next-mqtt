@@ -24,7 +24,15 @@ export const connect = (opts: ClientOpts): Promise<MqttClientWithUtils> =>
       script
         .getState()
         .get(opts.clientId, { runOn: 'connected' })
-        ?.forEach((data) => triggerFunc(data.script, {}));
+        ?.forEach((data) =>
+          triggerFunc(data.script, {}, () =>
+            script.getState().addHistory(opts.clientId, {
+              runOn: 'connected',
+              name: data.name,
+              time: Date.now(),
+            })
+          )
+        );
 
       client.subChannels = function (id) {
         const clientId = id || this.options.clientId!;
@@ -35,11 +43,20 @@ export const connect = (opts: ClientOpts): Promise<MqttClientWithUtils> =>
 
         this.on('message', (topic, msg) => {
           const _message = msg.toString();
+          const payload = { runOn: 'message' as any, topic, message: _message };
 
           script
             .getState()
-            .get(opts.clientId, { runOn: 'message', topic, message: _message })
-            ?.forEach((data) => triggerFunc(data.script, { topic, message: _message }));
+            .get(opts.clientId, payload)
+            ?.forEach((data) =>
+              triggerFunc(data.script, { topic, message: _message }, () =>
+                script.getState().addHistory(opts.clientId, {
+                  ...payload,
+                  name: data.name,
+                  time: Date.now(),
+                })
+              )
+            );
 
           message.getState().add(clientId, {
             topic,
@@ -52,7 +69,15 @@ export const connect = (opts: ClientOpts): Promise<MqttClientWithUtils> =>
           script
             .getState()
             .get(opts.clientId, { runOn: 'disconnected' })
-            ?.forEach((data) => triggerFunc(data.script, {}))
+            ?.forEach((data) =>
+              triggerFunc(data.script, {}, () =>
+                script.getState().addHistory(opts.clientId, {
+                  runOn: 'disconnected',
+                  name: data.name,
+                  time: Date.now(),
+                })
+              )
+            )
         );
 
         return this;
